@@ -1,3 +1,4 @@
+import RTCEvents from '../../service/RTC/RTCEvents';
 import browser from '../browser';
 
 import RTCUtils from './RTCUtils';
@@ -247,6 +248,37 @@ describe('RTCUtils', () => {
                     })
                     .catch(error => unexpectedErrorHandler(error, done));
             });
+        });
+    });
+
+    describe('DEVICE_LIST events on init', () => {
+
+        it('received DEVICE_LIST_AVAILABLE', done => {
+
+            const listener = devices => {
+                RTCUtils.removeEventListener(RTCEvents.DEVICE_LIST_AVAILABLE, listener);
+                setTimeout(() => {
+                    expect(devices.length).toBe(3);
+                    done();
+                }, 0);
+            };
+
+            RTCUtils.addEventListener(RTCEvents.DEVICE_LIST_AVAILABLE, listener);
+            RTCUtils.init();
+        });
+
+        it('received DEVICE_LIST_CHANGED', done => {
+
+            const listener = devices => {
+                RTCUtils.removeEventListener(RTCEvents.DEVICE_LIST_CHANGED, listener);
+                setTimeout(() => {
+                    expect(devices.length).toBe(3);
+                    done();
+                }, 0);
+            };
+
+            RTCUtils.addEventListener(RTCEvents.DEVICE_LIST_CHANGED, listener);
+            RTCUtils.init();
         });
     });
 });
